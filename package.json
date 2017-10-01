@@ -1,0 +1,24 @@
+{
+  "name": "weixin",
+  "version": "1.0.0",
+  "description": "sd",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/salody/weixindemo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/salody/weixindemo/issues"
+  },
+  "homepage": "https://github.com/salody/weixindemo#readme",
+  "dependencies": {
+    "koa": "^1.4.0",
+    "sha1": "^1.1.1"
+  }
+}
