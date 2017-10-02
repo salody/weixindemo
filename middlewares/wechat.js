@@ -22,7 +22,7 @@ class WeChat {
         } catch (e) {
           return this.updateAccessToken()
         }
-        if (this.isValidAccessToken(data)) {
+        if (WeChat.isValidAccessToken(data)) {
           return data;
         } else {
           return this.updateAccessToken()
@@ -49,7 +49,7 @@ class WeChat {
     );
   }
 
-  isValidAccessToken(data) {
+  static isValidAccessToken(data) {
     if (!data || !data.access_token || !data.expires_in) {
       return false;
     }
