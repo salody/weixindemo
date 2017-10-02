@@ -48,7 +48,7 @@ class WeChat {
       })
   }
 
-  static isValidAccessToken(data) {
+   isValidAccessToken(data) {
     if (!data || !data.access_token || !data.expires_in) {
       return false;
     }
