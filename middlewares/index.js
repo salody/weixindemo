@@ -5,12 +5,14 @@
  */
 
 const sha1 = require('sha1');
+const getRawBody = require('raw-body');
 const WeChat = require('./wechat');
 
 module.exports = function (opts) {
   const weChat = new WeChat(opts);
-  weChat.getAccessToken();
-  return function* connect() {
+  //weChat.getAccessToken();
+
+  return function* connect(next) {
     let token = opts.wechat.token;
     let signature = this.query.signature;
     let timestamp = this.query.timestamp;
@@ -23,10 +25,24 @@ module.exports = function (opts) {
     // 2. 将三个参数字符串拼接成一个字符串进行sha1加密
     let shaStr = sha1(str);
     // 3. 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
-    if (shaStr === signature) {
-      this.body = echostr + '';
-    } else {
-      this.body = '这里只接受微信后台的访问哦';
+    if (this.method === 'GET') {
+      if (shaStr === signature) {
+        this.body = echostr + '';
+      } else {
+        this.body = '这里只接受微信后台的访问哦';
+      }
+    } else if (this.method === 'POST') {
+      if (shaStr !== signature) {
+        this.body = 'wrong';
+        return false;
+      } else {
+        let data = yield getRawBody(this.req, {
+          length: this.req.headers['content-length'],
+          limit: '1mb',
+          encoding: this.charset
+        });
+        console.log(data.toString());
+      }
     }
   }
 };
