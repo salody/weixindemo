@@ -41,7 +41,8 @@ class WeChat {
       .then(res => res.json())
       .then(data => {
         if (data.expires_in) {
-          data.expires_in = (data.expires_in - 20) * 1000;
+          let now = new Date().getTime();
+          data.expires_in = now + (data.expires_in - 20) * 1000;
         }
         data = JSON.stringify(data);
         this.opts.saveAccessToken(data);
@@ -53,15 +54,10 @@ class WeChat {
       return false;
     }
 
-    let access_token =  data.access_token;
     let expires_in = data.expires_in;
     let now = new Date().getTime();
 
-    if (now < expires_in) {
-      return true
-    } else {
-      return false;
-    }
+    return now < expires_in;
   }
 }
 
