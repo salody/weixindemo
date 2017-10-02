@@ -25,31 +25,31 @@ class WeChat {
         if (this.isValidAccessToken(data)) {
           return data;
         } else {
-          return this.updateAccessToken(data)
+          return this.updateAccessToken()
         }
       })
       .then((data) => {
-        this.accessToken = data.access_token;
-        this.expires_in = data.expires_in;
+        data = JSON.stringify(data);
         this.opts.saveAccessToken(data);
       })
   }
 
   updateAccessToken() {
     let url = this.opts.api.accessToken;
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        if (data.expires_in) {
-          let now = new Date().getTime();
-          data.expires_in = now + (data.expires_in - 20) * 1000;
-        }
-        data = JSON.stringify(data);
-        this.opts.saveAccessToken(data);
-      })
+    return(
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          if (data.expires_in) {
+            let now = new Date().getTime();
+            data.expires_in = now + (data.expires_in - 20) * 1000;
+          }
+          return data;
+        })
+    );
   }
 
-   isValidAccessToken(data) {
+  isValidAccessToken(data) {
     if (!data || !data.access_token || !data.expires_in) {
       return false;
     }
@@ -64,7 +64,7 @@ class WeChat {
 module.exports = function (opts) {
   const weChat = new WeChat(opts);
   weChat.getAccessToken();
-  return function *connect() {
+  return function* connect() {
     let token = opts.wechat.token;
     let signature = this.query.signature;
     let timestamp = this.query.timestamp;
