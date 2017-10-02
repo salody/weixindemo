@@ -9,6 +9,6 @@ const wechat = require('./middlewares/wechat');
 const koa = require('koa');
 const app = new koa();
 
-app.use(wechat(config.wechat));
+app.use(wechat(config));
 
 app.listen(config.port);
