@@ -19,6 +19,7 @@
   "homepage": "https://github.com/salody/weixindemo#readme",
   "dependencies": {
     "koa": "^1.4.0",
+    "node-fetch": "^1.7.3",
     "sha1": "^1.1.1"
   }
 }

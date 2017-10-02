@@ -5,10 +5,71 @@
  */
 
 const sha1 = require('sha1');
+const fetch = require('node-fetch');
+
+class WeChat {
+  constructor(opts) {
+    this.opts = opts;
+    this.AppID = opts.wechat.AppID;
+    this.AppSecret = opts.wechat.AppSecret;
+  }
+
+  getAccessToken() {
+    this.opts.getAccessToken()
+      .then((data) => {
+        try {
+          data = JSON.parse(data);
+        } catch (e) {
+          return this.updateAccessToken()
+        }
+        if (this.isValidAccessToken(data)) {
+          return data;
+        } else {
+          return this.updateAccessToken(data)
+        }
+      })
+      .then((data) => {
+        this.accessToken = data.access_token;
+        this.expires_in = data.expires_in;
+        this.opts.saveAccessToken(data);
+      })
+  }
+
+  updateAccessToken() {
+    let url = this.opts.api.accessToken;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        if (data.expires_in) {
+          data.expires_in = (data.expires_in - 20) * 1000;
+        }
+        data = JSON.stringify(data);
+        this.opts.saveAccessToken(data);
+      })
+  }
+
+  static isValidAccessToken(data) {
+    if (!data || !data.access_token || !data.expires_in) {
+      return false;
+    }
+
+    let access_token =  data.access_token;
+    let expires_in = data.expires_in;
+    let now = new Date().getTime();
+
+    if (now < expires_in) {
+      return true
+    } else {
+      return false;
+    }
+  }
+}
 
 module.exports = function (opts) {
-  return function *connect(next) {
-    let token = opts.token;
+  const weChat = new WeChat(opts);
+  weChat.getAccessToken();
+  return function *connect() {
+    let token = opts.wechat.token;
     let signature = this.query.signature;
     let timestamp = this.query.timestamp;
     let nonce = this.query.nonce;
