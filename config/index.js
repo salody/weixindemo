@@ -5,7 +5,7 @@
  */
 
 const config = {
-  port: 80,
+  port: 3000,
   wechat: {
     AppID: 'wxbb3a41e497d23f1c',
     AppSecret: '01034d28e71aca3d05957b9abe13f016',
