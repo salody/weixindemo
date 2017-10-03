@@ -5,7 +5,7 @@
  */
 const fs = require('fs');
 
-const count = function () {
+const countLogin = function () {
   return new Promise((resolve, reject) => {
     if (!fs.existsSync('./count.txt')) {
       fs.writeFileSync('./count.txt','')
@@ -22,6 +22,13 @@ const count = function () {
       });
     });
   })
+};
+
+const count = function () {
+  return function *(next) {
+    yield countLogin();
+    yield next;
+  }
 };
 
 module.exports = count;
