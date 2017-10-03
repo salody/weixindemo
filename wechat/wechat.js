@@ -61,16 +61,18 @@ class WeChat {
   }
 
   // info 是要发送的。 message是进来的
+  // info的对象键值严格对应微信响应消息的键值
   reply(info, message) {
-    //let info= {};
     let type = 'text';
     let FromUserName = message.FromUserName;
     let ToUserName = message.ToUserName;
 
-    info.type = info.type || type;
+    info.MsgType = info.MsgType || type;
     info.ToUserName = FromUserName;
     info.FromUserName = ToUserName;
 
+    // 注意this绑定问题。调用reply时加上call
+    // 使得koa直接进行回复
     this.status = 200;
     this.type = 'application/xml';
     this.body = tpl(info);

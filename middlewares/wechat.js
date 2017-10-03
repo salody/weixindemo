@@ -47,16 +47,8 @@ module.exports = function (opts) {
         // 转化后的数据格式化
         let message = util.formatMessage(content.xml);
         if (message.MsgType === 'text') {
-          /*this.status = 200;
-          this.type = 'application/xml';
-          this.body = `<xml>
- <ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
- <FromUserName><![CDATA[${message.ToUserName}]]></FromUserName>
- <CreateTime>${new Date().getTime()}</CreateTime>
- <MsgType><![CDATA[text]]></MsgType>
- <Content><![CDATA[]]></Content>
- </xml>`;*/
-          weChat.reply({content: '我是谁'}, message);
+          // 这里的this注意绑定
+          weChat.reply.call(this, {content: '我是谁？我在哪？谁在打我?'}, message);
         }
       }
     }
