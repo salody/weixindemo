@@ -42,9 +42,21 @@ module.exports = function (opts) {
           limit: '1mb',
           encoding: this.charset
         });
-        //console.log(data.toString());
+        // xml转化为json
         let content = yield util.parseXMLAsync(data);
-        console.log(content);
+        // 转化后的数据格式化
+        let message = util.formatMessage(content.xml);
+        if (message.MsgType === 'text') {
+          this.status = 200;
+          this.type = 'application/xml';
+          this.body = `<xml>
+ <ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
+ <FromUserName><![CDATA[${message.ToUserName}]]></FromUserName>
+ <CreateTime>${new Date().getTime()}</CreateTime>
+ <MsgType><![CDATA[text]]></MsgType>
+ <Content><![CDATA[]]></Content>
+ </xml>`;
+        }
       }
     }
   }
