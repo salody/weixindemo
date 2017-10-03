@@ -47,7 +47,7 @@ module.exports = function (opts) {
         // 转化后的数据格式化
         let message = util.formatMessage(content.xml);
         if (message.MsgType === 'text') {
-          this.status = 200;
+          /*this.status = 200;
           this.type = 'application/xml';
           this.body = `<xml>
  <ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
@@ -55,7 +55,8 @@ module.exports = function (opts) {
  <CreateTime>${new Date().getTime()}</CreateTime>
  <MsgType><![CDATA[text]]></MsgType>
  <Content><![CDATA[]]></Content>
- </xml>`;
+ </xml>`;*/
+          weChat.reply({content: '我是谁'}, message);
         }
       }
     }

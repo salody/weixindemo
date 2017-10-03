@@ -5,6 +5,7 @@
  */
 
 const fetch = require('node-fetch');
+const tpl = require('./tpl');
 
 class WeChat {
   constructor(opts) {
@@ -57,6 +58,23 @@ class WeChat {
     let now = new Date().getTime();
 
     return now < expires_in;
+  }
+
+  // info 是要发送的。 message是进来的
+  reply(info, message) {
+    //let info= {};
+    let type = 'text';
+    let FromUserName = message.FromUserName;
+    let ToUserName = message.ToUserName;
+
+    info.type = info.type || type;
+    info.ToUserName = FromUserName;
+    info.FromUserName = ToUserName;
+
+    this.status = 200;
+    this.type = 'application/xml';
+    this.body = tpl(info);
+
   }
 }
 
