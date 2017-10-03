@@ -4,60 +4,60 @@
  * 2017/10/2
  */
 
-const fetch = require('node-fetch');
+const sha1 = require('sha1');
+const getRawBody = require('raw-body');
+const WeChat = require('../wechat/wechat');
+const util = require('../lib/util');
 
-class WeChat {
-  constructor(opts) {
-    this.opts = opts;
-    this.AppID = opts.wechat.AppID;
-    this.AppSecret = opts.wechat.AppSecret;
-  }
+module.exports = function (opts) {
+  const weChat = new WeChat(opts);
+  //weChat.getAccessToken();
 
-  getAccessToken() {
-    this.opts.getAccessToken()
-      .then((data) => {
-        try {
-          data = JSON.parse(data);
-        } catch (e) {
-          return this.updateAccessToken()
+  return function* connect(next) {
+    let token = opts.wechat.token;
+    let signature = this.query.signature;
+    let timestamp = this.query.timestamp;
+    let nonce = this.query.nonce;
+    let echostr = this.query.echostr;
+
+    // 加密/校验流程如下：
+    // 1.将token、timestamp、nonce三个参数进行字典序排序
+    let str = [token, timestamp, nonce].sort().join('');
+    // 2. 将三个参数字符串拼接成一个字符串进行sha1加密
+    let shaStr = sha1(str);
+    // 3. 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
+    if (this.method === 'GET') {
+      if (shaStr === signature) {
+        this.body = echostr + '';
+      } else {
+        this.body = '这里只接受微信后台的访问哦';
+      }
+    } else if (this.method === 'POST') {
+      if (shaStr !== signature) {
+        this.body = 'wrong';
+        return false;
+      } else {
+        let data = yield getRawBody(this.req, {
+          length: this.req.headers['content-length'],
+          limit: '1mb',
+          encoding: this.charset
+        });
+        // xml转化为json
+        let content = yield util.parseXMLAsync(data);
+        // 转化后的数据格式化
+        let message = util.formatMessage(content.xml);
+        if (message.MsgType === 'text') {
+          this.status = 200;
+          this.type = 'application/xml';
+          this.body = `<xml>
+ <ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
+ <FromUserName><![CDATA[${message.ToUserName}]]></FromUserName>
+ <CreateTime>${new Date().getTime()}</CreateTime>
+ <MsgType><![CDATA[text]]></MsgType>
+ <Content><![CDATA[]]></Content>
+ </xml>`;
         }
-        if (WeChat.isValidAccessToken(data)) {
-          return data;
-        } else {
-          return this.updateAccessToken()
-        }
-      })
-      .then((data) => {
-        data = JSON.stringify(data);
-        this.opts.saveAccessToken(data);
-      })
-  }
-
-  updateAccessToken() {
-    let url = this.opts.api.accessToken;
-    return(
-      fetch(url)
-        .then(res => res.json())
-        .then(data => {
-          if (data.expires_in) {
-            let now = new Date().getTime();
-            data.expires_in = now + (data.expires_in - 20) * 1000;
-          }
-          return data;
-        })
-    );
-  }
-
-  static isValidAccessToken(data) {
-    if (!data || !data.access_token || !data.expires_in) {
-      return false;
+      }
     }
-
-    let expires_in = data.expires_in;
-    let now = new Date().getTime();
-
-    return now < expires_in;
   }
-}
-
-module.exports = WeChat;
+};

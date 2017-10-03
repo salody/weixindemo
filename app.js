@@ -5,7 +5,7 @@
  */
 
 const config = require('./config');
-const wechat = require('./middlewares/index');
+const wechat = require('./middlewares/wechat');
 const koa = require('koa');
 const app = new koa();
 const count = require('./middlewares/count');
