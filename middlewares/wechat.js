@@ -8,6 +8,7 @@ const sha1 = require('sha1');
 const getRawBody = require('raw-body');
 const WeChat = require('../wechat/wechat');
 const util = require('../lib/util');
+const reply = require('./reply');
 
 module.exports = function (opts) {
   const weChat = new WeChat(opts);
@@ -46,10 +47,8 @@ module.exports = function (opts) {
         let content = yield util.parseXMLAsync(data);
         // 转化后的数据格式化
         let message = util.formatMessage(content.xml);
-        if (message.MsgType === 'text') {
-          // 这里的this注意绑定
-          weChat.reply.call(this, {content: '我是谁？我在哪？谁在打我?'}, message);
-        }
+        let info = reply(message);
+        weChat.reply.call(this, info, message);
       }
     }
   }

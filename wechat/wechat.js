@@ -67,7 +67,7 @@ class WeChat {
     let FromUserName = message.FromUserName;
     let ToUserName = message.ToUserName;
 
-    info.MsgType = info.MsgType || type;
+    info.MsgType = info.type || type;
     info.ToUserName = FromUserName;
     info.FromUserName = ToUserName;
 

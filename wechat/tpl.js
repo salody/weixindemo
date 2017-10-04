@@ -23,7 +23,7 @@ const tpl = function (info) {
         ${baseTpl}
         <MsgType><![CDATA[image]]></MsgType>
         <Image>
-        <MediaId><![CDATA[${info.MediaId}]]></MediaId>
+        <MediaId><![CDATA[${info.content.MediaId}]]></MediaId>
         </Image>
         </xml>`
       );
@@ -33,7 +33,7 @@ const tpl = function (info) {
         ${baseTpl}
         <MsgType><![CDATA[voice]]></MsgType>
         <Voice>
-        <MediaId><![${info.MediaId}]]></MediaId>
+        <MediaId><![${info.content.MediaId}]]></MediaId>
         </Voice>
         </xml>`
       );
@@ -43,9 +43,9 @@ const tpl = function (info) {
         ${baseTpl}
         <MsgType><![CDATA[video]]></MsgType>
         <Video>
-        <MediaId><![CDATA[${info.MediaId}]]></MediaId>
-        <Title><![CDATA[${info.Title || '视频消息的标题'}]]></Title>
-        <Description><![CDATA[${info.Description || '视频消息的描述'}]]></Description>
+        <MediaId><![CDATA[${info.content.MediaId}]]></MediaId>
+        <Title><![CDATA[${info.content.Title || '视频消息的标题'}]]></Title>
+        <Description><![CDATA[${info.content.Description || '视频消息的描述'}]]></Description>
         </Video> 
         </xml>`
       );
@@ -55,11 +55,11 @@ const tpl = function (info) {
         ${baseTpl}
         <MsgType><![CDATA[music]]></MsgType>
         <Music>
-        <Title><![CDATA[${info.Title || '音乐标题'}]]></Title>
-        <Description><![CDATA[${info.Description || '音乐描述'}]]></Description>
-        <MusicUrl><![CDATA[${info.MusicUrl || '音乐链接'}]]></MusicUrl>
-        <HQMusicUrl><![CDATA[${info.HQMusicUrl || '高品质音乐链接'}]]></HQMusicUrl>
-        <ThumbMediaId><![CDATA[${info.ThumbMediaId}]]></ThumbMediaId>
+        <Title><![CDATA[${info.content.Title || '音乐标题'}]]></Title>
+        <Description><![CDATA[${info.content.Description || '音乐描述'}]]></Description>
+        <MusicUrl><![CDATA[${info.content.MusicUrl || '音乐链接'}]]></MusicUrl>
+        <HQMusicUrl><![CDATA[${info.content.HQMusicUrl || '高品质音乐链接'}]]></HQMusicUrl>
+        <ThumbMediaId><![CDATA[${info.content.ThumbMediaId}]]></ThumbMediaId>
         </Music>
         </xml>`
       );
@@ -73,10 +73,10 @@ const tpl = function (info) {
         <ArticleCount>1</ArticleCount>
         <Articles>
         <item>
-        <Title><![CDATA[${info.Title}]]></Title> 
-        <Description><![CDATA[${info.Description}]]></Description>
-        <PicUrl><![CDATA[${info.PicUrl}]]></PicUrl>
-        <Url><![CDATA[${info.Url}]]></Url>
+        <Title><![CDATA[${info.content.Title}]]></Title> 
+        <Description><![CDATA[${info.content.Description}]]></Description>
+        <PicUrl><![CDATA[${info.content.PicUrl}]]></PicUrl>
+        <Url><![CDATA[${info.content.Url}]]></Url>
         </item>
         </Articles>
         </xml>`
