@@ -64,7 +64,7 @@ const reply = function (message) {
   }
 
   return {
-    content: '少侠好功夫，无法承受'
+    content: '少侠好功夫'
   }
 };
 
