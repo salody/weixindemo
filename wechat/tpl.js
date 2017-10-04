@@ -64,19 +64,26 @@ const tpl = function (info) {
         </xml>`
       );
     case 'news':
-      // todo 现在只支持回复一条图文信息。如果需要支持多条。需要将传来的info改造成数组进行遍历
-      // todo 等以后需要用到该业务时再进行改造。
+      // content是数组.代表多条图文消息
+      let items = [];
+      items = info.content.map((item) => {
+        return (
+          `<item>
+          <Title><![CDATA[${item.Title}]]></Title> 
+          <Description><![CDATA[${item.Description}]]></Description>
+          <PicUrl><![CDATA[${item.PicUrl}]]></PicUrl>
+          <Url><![CDATA[${item.Url}]]></Url>
+          </item>`
+        );
+      });
+      let itemsStr = items.join('');
       return (
         `<xml>
         ${baseTpl}
         <MsgType><![CDATA[news]]></MsgType>
-        <ArticleCount>1</ArticleCount>
+        <ArticleCount>${items.length}</ArticleCount>
         <Articles>
-        <item>
-        <Title><![CDATA[${info.content.Title}]]></Title> 
-        <Description><![CDATA[${info.content.Description}]]></Description>
-        <PicUrl><![CDATA[${info.content.PicUrl}]]></PicUrl>
-        <Url><![CDATA[${info.content.Url}]]></Url>
+        ${itemsStr}
         </item>
         </Articles>
         </xml>`

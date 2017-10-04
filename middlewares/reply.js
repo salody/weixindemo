@@ -39,12 +39,26 @@ const reply = function (message) {
     if (message.Content === '3') {
       return {
         type: 'news',
-        content: {
-          Title: '一个很小的标题',
-          Description: '这里是所有的详情描述，所有的详情描述',
-          PicUrl: 'http://www.fotor.com/images2/features/photo_effects/e_bw.jpg',
-          Url: 'www.github.com/salody'
-        }
+        content: [
+          {
+            Title: '一个很小的标题',
+            Description: '这里是所有的详情描述，所有的详情描述',
+            PicUrl: 'http://www.fotor.com/images2/features/photo_effects/e_bw.jpg',
+            Url: 'www.github.com/salody'
+          },
+          {
+            Title: '小小的标题',
+            Description: '这里是所有的详情描述，所有的详情描述',
+            PicUrl: 'http://www.fotor.com/images2/features/photo_effects/e_bw.jpg',
+            Url: 'www.github.com/salody'
+          },
+          {
+            Title: '有大大的梦想',
+            Description: '这里是所有的详情描述，所有的详情描述',
+            PicUrl: 'http://www.fotor.com/images2/features/photo_effects/e_bw.jpg',
+            Url: 'www.github.com/salody'
+          }
+        ]
       }
     }
   }
