@@ -69,7 +69,7 @@ const reply = function (message) {
         })
       }
       if (message.Content === '4') {
-        weChatApi.uploadMaterial('image', __dirname + '/1.jpg')
+        weChatApi.uploadTemporaryMaterial('image', __dirname + '/1.jpg')
           .then((data) => {
             resolve ({
               type: data.type,
@@ -81,7 +81,7 @@ const reply = function (message) {
 
       }
       if (message.Content === '5') {
-        weChatApi.uploadMaterial('image', __dirname + '/2.jpg')
+        weChatApi.uploadTemporaryMaterial('image', __dirname + '/2.jpg')
           .then((data) => {
             resolve ({
               type: 'music',

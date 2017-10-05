@@ -87,14 +87,14 @@ class WeChat {
 
   }
 
-  uploadMaterial(type, filepath) {
+  uploadTemporaryMaterial(type, filepath) {
      const form = {
        media: fs.createReadStream(filepath)
      };
     return (
       this.getAccessToken()
         .then(data => {
-          const url = this.opts.api.upload + 'access_token=' + data.access_token + '&type=' + type;
+          const url = this.opts.api.temporary + 'access_token=' + data.access_token + '&type=' + type;
           return url;
         })
         .then((url) => {
@@ -106,6 +106,34 @@ class WeChat {
                 //throw new Error(body.errmsg);
                 reject(body.errcode + ': ' + body.errmsg);
               }
+              resolve(body);
+            })
+          })
+        })
+    );
+  }
+
+  uploadPermanentMaterial(type, filepath) {
+    // todo: 新增图文素材
+    const form = {
+      media: fs.createReadStream(filepath)
+    };
+    return (
+      this.getAccessToken()
+        .then(data => {
+          const url = this.opts.api.permanent + 'add_material?' +'access_token=' + data.access_token + '&type=' + type;
+          return url;
+        })
+        .then((url) => {
+          return new Promise((resolve, reject) => {
+            request.post({url: url, formData: form}, (err, httpResponse, body) => {
+              if (err) reject(err);
+              body = JSON.parse(body);
+              if (body.errcode) {
+                //throw new Error(body.errmsg);
+                reject(body.errcode + ': ' + body.errmsg);
+              }
+              console.log(body);
               resolve(body);
             })
           })

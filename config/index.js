@@ -28,7 +28,8 @@ const config = {
   },
   api: {
     accessToken,
-    upload: 'https://api.weixin.qq.com/cgi-bin/media/upload?'
+    temporary: 'https://api.weixin.qq.com/cgi-bin/media/upload?',
+    permanent: 'https://api.weixin.qq.com/cgi-bin/material/'
   },
   getAccessToken() {
     return util.readeFileAsync(wechat_file);
