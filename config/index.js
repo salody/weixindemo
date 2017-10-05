@@ -7,8 +7,14 @@
 const util = require('../lib/util');
 const path = require('path');
 
-const AppID = 'wxbb3a41e497d23f1c';
-const AppSecret =  '7938eafd02094888914f57883c348643';
+// 测试账号
+const AppID = 'wx25e4f4c31b62e880';
+const AppSecret =  '96809b01cb28516555ac150585f53c34';
+
+// 正式账号  切换账号时要清除config下的wechat.txt
+// const AppID = 'wxbb3a41e497d23f1c';
+// const AppSecret = 'fd93141eaef1260831058e848815fb1b';
+
 const token = 'whosyourdaddy';
 const accessToken = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${AppID}&secret=${AppSecret}`;
 const wechat_file = path.join(__dirname + '/wechat.txt');

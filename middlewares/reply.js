@@ -28,7 +28,7 @@ const reply = function (message) {
 
     // 和用户对话
     // 1 文字 2 音乐 3 新闻
-    if (message.MsgType === 'text') {
+    else if (message.MsgType === 'text') {
       if (message.Content === '1') {
         resolve ({
           content: '请勿骚扰'
@@ -71,7 +71,6 @@ const reply = function (message) {
       if (message.Content === '4') {
         weChatApi.uploadMaterial('image', __dirname + '/1.jpg')
           .then((data) => {
-            console.log(data);
             resolve ({
               type: data.type,
               content: {
@@ -82,21 +81,23 @@ const reply = function (message) {
 
       }
       if (message.Content === '5') {
-        weChatApi.uploadMaterial('thumb', __dirname + '/2.jpg')
+        weChatApi.uploadMaterial('image', __dirname + '/2.jpg')
           .then((data) => {
             resolve ({
               type: 'music',
               content: {
                 ThumbMediaId: data.media_id,
                 Title: '你还要我怎样',
-                MusicUrl: 'http://m7.music.126.net/20171005232507/a9d53aa69a82ae0b0a536face4c05137/ymusic/c4dd/3a1b/d118/f34c71d65eef6eb740b57cd55f145d00.mp3',
-                Description: '命都给了你，还要我怎样'
+                MusicUrl: 'http://m10.music.126.net/20171006010646/966aa70f1a20a80fd170f4e0d7f5fe58/ymusic/681e/45fc/220f/083f3b9525df5ded32f7d84f1ffbc895.mp3',
+                HQMusicUrl: 'http://m10.music.126.net/20171006010646/966aa70f1a20a80fd170f4e0d7f5fe58/ymusic/681e/45fc/220f/083f3b9525df5ded32f7d84f1ffbc895.mp3',
+                Description: '来自薛之谦的内心独白'
               }
             })
           })
 
       }
     }
+
   })
 /*
   return {

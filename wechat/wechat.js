@@ -7,7 +7,6 @@
 const fetch = require('node-fetch');
 const tpl = require('./tpl');
 const fs = require('fs');
-const FormData = require('form-data');
 const request = require('request');
 
 class WeChat {
@@ -17,6 +16,8 @@ class WeChat {
     this.AppSecret = opts.wechat.AppSecret;
   }
 
+  // todo: 这里的getAccessToken和update逻辑有些问题。在更换AppId以后会出现混乱。需要做调整。
+  // todo: 暂行办法是删除config文件夹中存储的token。重新获取一次accessToken
   getAccessToken() {
     return this.opts.getAccessToken()
       .then((data) => {
@@ -42,7 +43,10 @@ class WeChat {
     let url = this.opts.api.accessToken;
     return (
       fetch(url)
-        .then(res => res.json())
+        .then(res => {
+          console.log(res);
+          return res.json()
+        })
         .then(data => {
           if (data.expires_in) {
             let now = new Date().getTime();
