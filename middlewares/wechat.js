@@ -12,7 +12,7 @@ const reply = require('./reply');
 
 module.exports = function (opts) {
   const weChat = new WeChat(opts);
-  //weChat.getAccessToken();
+  weChat.getAccessToken();
 
   return function* connect(next) {
     let token = opts.wechat.token;

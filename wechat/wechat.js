@@ -31,11 +31,11 @@ class WeChat {
           return this.updateAccessToken()
         }
       })
-    /*.then((data) => {
+    .then((data) => {
       data = JSON.stringify(data);
       this.opts.saveAccessToken(data);
-      return data;
-    })*/
+      return JSON.parse(data);
+    })
   }
 
   updateAccessToken() {
@@ -97,7 +97,12 @@ class WeChat {
           return new Promise((resolve, reject) => {
             request.post({url: url, formData: form}, (err, httpResponse, body) => {
               if (err) reject(err);
-              resolve(JSON.parse(body));
+              body = JSON.parse(body);
+              if (body.errcode) {
+                //throw new Error(body.errmsg);
+                reject(body.errcode + ': ' + body.errmsg);
+              }
+              resolve(body);
             })
           })
         })

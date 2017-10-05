@@ -71,6 +71,7 @@ const reply = function (message) {
       if (message.Content === '4') {
         weChatApi.uploadMaterial('image', __dirname + '/1.jpg')
           .then((data) => {
+            console.log(data);
             resolve ({
               type: data.type,
               content: {
@@ -81,7 +82,7 @@ const reply = function (message) {
 
       }
       if (message.Content === '5') {
-        weChatApi.uploadMaterial('image', __dirname + '/1.jpg')
+        weChatApi.uploadMaterial('thumb', __dirname + '/2.jpg')
           .then((data) => {
             resolve ({
               type: 'music',
