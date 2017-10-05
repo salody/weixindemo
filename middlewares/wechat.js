@@ -47,7 +47,7 @@ module.exports = function (opts) {
         let content = yield util.parseXMLAsync(data);
         // 转化后的数据格式化
         let message = util.formatMessage(content.xml);
-        let info = reply(message);
+        let info = yield reply(message);
         weChat.reply.call(this, info, message);
       }
     }

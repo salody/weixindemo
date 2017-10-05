@@ -21,7 +21,8 @@ const config = {
     token
   },
   api: {
-    accessToken
+    accessToken,
+    upload: 'https://api.weixin.qq.com/cgi-bin/media/upload?'
   },
   getAccessToken() {
     return util.readeFileAsync(wechat_file);

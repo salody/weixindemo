@@ -6,6 +6,9 @@
 
 const fetch = require('node-fetch');
 const tpl = require('./tpl');
+const fs = require('fs');
+const FormData = require('form-data');
+const request = require('request');
 
 class WeChat {
   constructor(opts) {
@@ -15,7 +18,7 @@ class WeChat {
   }
 
   getAccessToken() {
-    this.opts.getAccessToken()
+    return this.opts.getAccessToken()
       .then((data) => {
         try {
           data = JSON.parse(data);
@@ -28,15 +31,16 @@ class WeChat {
           return this.updateAccessToken()
         }
       })
-      .then((data) => {
-        data = JSON.stringify(data);
-        this.opts.saveAccessToken(data);
-      })
+    /*.then((data) => {
+      data = JSON.stringify(data);
+      this.opts.saveAccessToken(data);
+      return data;
+    })*/
   }
 
   updateAccessToken() {
     let url = this.opts.api.accessToken;
-    return(
+    return (
       fetch(url)
         .then(res => res.json())
         .then(data => {
@@ -77,6 +81,27 @@ class WeChat {
     this.type = 'application/xml';
     this.body = tpl(info);
 
+  }
+
+  uploadMaterial(type, filepath) {
+     const form = {
+       media: fs.createReadStream(filepath)
+     };
+    return (
+      this.getAccessToken()
+        .then(data => {
+          const url = this.opts.api.upload + 'access_token=' + data.access_token + '&type=' + type;
+          return url;
+        })
+        .then((url) => {
+          return new Promise((resolve, reject) => {
+            request.post({url: url, formData: form}, (err, httpResponse, body) => {
+              if (err) reject(err);
+              resolve(JSON.parse(body));
+            })
+          })
+        })
+    );
   }
 }
 
