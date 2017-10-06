@@ -116,7 +116,6 @@ class WeChat {
           return url;
         })
         .then((url) => {
-          console.log(url);
           let options = {
             url: url,
           };
