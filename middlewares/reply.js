@@ -69,7 +69,7 @@ const reply = function (message) {
         })
       }
       if (message.Content === '4') {
-        weChatApi.uploadTemporaryMaterial('image', __dirname + '/1.jpg')
+        weChatApi.uploadMaterial('image', __dirname + '/1.jpg')
           .then((data) => {
             resolve ({
               type: data.type,
@@ -78,10 +78,9 @@ const reply = function (message) {
               }
             })
           })
-
       }
       if (message.Content === '5') {
-        weChatApi.uploadTemporaryMaterial('image', __dirname + '/2.jpg')
+        weChatApi.uploadMaterial('image', __dirname + '/2.jpg')
           .then((data) => {
             resolve ({
               type: 'music',
@@ -95,6 +94,18 @@ const reply = function (message) {
             })
           })
 
+      }
+      if (message.Content === '6') {
+        weChatApi.uploadMaterial('pic', __dirname + '/1.jpg', true)
+          .then((data) => {
+            console.log(data);
+            resolve ({
+              type: data.type,
+              content: {
+                MediaId: data.media_id
+              }
+            })
+          })
       }
     }
 

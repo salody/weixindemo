@@ -44,7 +44,6 @@ class WeChat {
     return (
       fetch(url)
         .then(res => {
-          console.log(res);
           return res.json()
         })
         .then(data => {
@@ -87,53 +86,53 @@ class WeChat {
 
   }
 
-  uploadTemporaryMaterial(type, filepath) {
-     const form = {
-       media: fs.createReadStream(filepath)
-     };
-    return (
-      this.getAccessToken()
-        .then(data => {
-          const url = this.opts.api.temporary + 'access_token=' + data.access_token + '&type=' + type;
-          return url;
-        })
-        .then((url) => {
-          return new Promise((resolve, reject) => {
-            request.post({url: url, formData: form}, (err, httpResponse, body) => {
-              if (err) reject(err);
-              body = JSON.parse(body);
-              if (body.errcode) {
-                //throw new Error(body.errmsg);
-                reject(body.errcode + ': ' + body.errmsg);
-              }
-              resolve(body);
-            })
-          })
-        })
-    );
-  }
+  // material: 当上传文件时图文时，这个是一个对象数组
+  // 当不是图文时是，是上传文件的路径地址
+  uploadMaterial(type, material, permanent) {
+    let form = {};
+    let uploadUrl = this.opts.api.temporary.upload;
 
-  uploadPermanentMaterial(type, filepath) {
-    // todo: 新增图文素材
-    const form = {
-      media: fs.createReadStream(filepath)
-    };
+    if (permanent) {
+      uploadUrl = this.opts.api.permanent.upload;
+    }
+    if (type === 'pic') {
+      uploadUrl = this.opts.api.permanent.uploadNewsPic;
+    }
+    if (type === 'news') {
+      uploadUrl = this.opts.api.permanent.uploadNews;
+      form = material
+    } else {
+      form.media = fs.createReadStream(material);
+    }
     return (
       this.getAccessToken()
         .then(data => {
-          const url = this.opts.api.permanent + 'add_material?' +'access_token=' + data.access_token + '&type=' + type;
+          let url = uploadUrl + 'access_token=' + data.access_token;
+          if (type !== 'news' && type !== 'pic') {
+            url += '&type=' + type;
+          } else {
+            form.accessToken = data.access_token;
+          }
           return url;
         })
         .then((url) => {
+          console.log(url);
+          let options = {
+            url: url,
+          };
+          if (type === 'news') {
+            options.body = form;
+          } else {
+            options.formData = form;
+          }
           return new Promise((resolve, reject) => {
-            request.post({url: url, formData: form}, (err, httpResponse, body) => {
+            request.post(options, (err, httpResponse, body) => {
               if (err) reject(err);
               body = JSON.parse(body);
               if (body.errcode) {
                 //throw new Error(body.errmsg);
                 reject(body.errcode + ': ' + body.errmsg);
               }
-              console.log(body);
               resolve(body);
             })
           })

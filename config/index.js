@@ -28,8 +28,16 @@ const config = {
   },
   api: {
     accessToken,
-    temporary: 'https://api.weixin.qq.com/cgi-bin/media/upload?',
-    permanent: 'https://api.weixin.qq.com/cgi-bin/material/'
+    temporary: {
+      upload: 'https://api.weixin.qq.com/cgi-bin/media/upload?',
+      fetch: 'https://api.weixin.qq.com/cgi-bin/media/get?'
+    },
+    permanent: {
+      upload: 'https://api.weixin.qq.com/cgi-bin/material/add_material?',
+      uploadNews: 'https://api.weixin.qq.com/cgi-bin/material/add_news?',
+      uploadNewsPic: 'https://api.weixin.qq.com/cgi-bin/media/uploadimg?',
+      fetch: 'https://api.weixin.qq.com/cgi-bin/material/get_material?'
+    }
   },
   getAccessToken() {
     return util.readeFileAsync(wechat_file);
